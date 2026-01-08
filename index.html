@@ -3,224 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Video Editor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Faiq Subhani | Visual Engineer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&family=Teko:wght@300;600&display=swap" rel="stylesheet">
     
     <style>
-        /* --- 1. CORE STYLES --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-        body { background-color: #050505; color: #ffffff; overflow-x: hidden; }
-
-        /* Background Glow */
-        body::before {
-            content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(29, 29, 29, 0.4) 0%, rgba(0,0,0,1) 70%);
-            z-index: -1;
+        /* --- 1. CORE VARIABLES --- */
+        :root {
+            --neon-red: #ff3333;
+            --off-white: #f0f0f0;
+            --bg-dark: #080808;
+            --card-bg: #111;
         }
 
-        /* --- 2. HEADER --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--off-white); 
+            font-family: 'Space Grotesk', sans-serif; 
+            overflow-x: hidden;
+        }
+
+        /* --- 2. BACKGROUND & NOISE --- */
+        .noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.06; pointer-events: none; z-index: 99;
+        }
+
+        /* --- 3. CUSTOM CURSOR (Minimalist) --- */
+        #cursor {
+            width: 20px; height: 20px; border: 1px solid var(--neon-red);
+            position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background 0.2s;
+            mix-blend-mode: difference;
+        }
+        body.hovering #cursor { width: 50px; height: 50px; background: var(--neon-red); border: none; mix-blend-mode: normal; opacity: 0.5; }
+
+        /* --- 4. INFINITE MARQUEE (The "Fashion" Look) --- */
+        .marquee-container {
+            position: absolute; top: 20vh; width: 100%; overflow: hidden; white-space: nowrap;
+            opacity: 0.05; transform: rotate(-5deg) scale(1.2); pointer-events: none;
+        }
+        .marquee-content {
+            display: inline-block; font-family: 'Teko', sans-serif; font-size: 15rem; font-weight: 600;
+            text-transform: uppercase; animation: scroll 20s linear infinite;
+        }
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* --- 5. HEADER (Hacker Text) --- */
         header {
-            height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            padding: 20px; animation: fadeIn 1.5s ease-out;
-            background: radial-gradient(circle at center, rgba(255, 51, 51, 0.1) 0%, transparent 70%);
+            height: 90vh; display: flex; flex-direction: column; 
+            justify-content: center; align-items: flex-start; text-align: left;
+            padding: 0 10%; position: relative; z-index: 2;
         }
+
+        .role-tag {
+            font-size: 0.9rem; letter-spacing: 4px; color: var(--neon-red); text-transform: uppercase;
+            margin-bottom: 20px; display: inline-block; border-bottom: 1px solid var(--neon-red); padding-bottom: 5px;
+        }
+
         h1 {
-            font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; text-transform: uppercase;
-            background: linear-gradient(90deg, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            font-family: 'Teko', sans-serif; font-size: clamp(5rem, 12vw, 10rem); 
+            text-transform: uppercase; line-height: 0.8; margin-bottom: 30px; 
+            color: white; mix-blend-mode: color-dodge;
         }
-        .subtitle { font-size: 1.2rem; color: #888; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 30px; }
-        .btn {
-            padding: 15px 40px; background: white; color: black; text-decoration: none; font-weight: 900;
-            text-transform: uppercase; border-radius: 50px; transition: 0.3s;
-        }
-        .btn:hover { background: #ff3333; color: white; box-shadow: 0 0 30px rgba(255, 51, 51, 0.6); }
 
-        /* --- 3. SECTIONS & TITLES --- */
-        .container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
-        
-        .section-title {
-            font-size: 2rem; margin-top: 80px; margin-bottom: 30px; padding-left: 20px;
-            border-left: 5px solid #ff3333; text-transform: uppercase; letter-spacing: 2px;
-            display: flex; align-items: center; gap: 10px;
+        .cta-btn {
+            padding: 15px 40px; border: 1px solid rgba(255,255,255,0.2);
+            color: white; text-transform: uppercase; text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif; font-weight: 600; letter-spacing: 1px;
+            transition: 0.4s; background: transparent; position: relative; overflow: hidden;
         }
         
-        /* Special Gold Title for Best Work */
-        .gold-title { border-color: #ffd700; color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+        /* Laser Sweep Effect on Button */
+        .cta-btn::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        .cta-btn:hover::after { left: 100%; }
+        .cta-btn:hover { border-color: var(--neon-red); color: var(--neon-red); }
 
-        /* Neon Divider Line */
-        .divider {
-            height: 1px; background: linear-gradient(90deg, transparent, #333, transparent);
-            margin: 60px 0; width: 100%;
+        /* --- 6. BENTO GRID LAYOUT --- */
+        .container { max-width: 1400px; margin: 0 auto; padding: 100px 20px; position: relative; z-index: 2; }
+
+        .section-label {
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; text-transform: uppercase;
+            letter-spacing: 3px; color: #555; margin-bottom: 40px; border-left: 2px solid var(--neon-red);
+            padding-left: 15px; margin-top: 100px;
         }
 
-        /* --- 4. GRID & CARDS --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px; /* Tighter gap for modern look */
+        }
 
+        /* The Card - FLAT & CLEAN */
         .card {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px; overflow: hidden; transition: all 0.4s ease;
+            background: var(--card-bg); position: relative; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
         }
-        .card:hover { transform: translateY(-10px); border-color: #ff3333; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
 
-        /* Special Gold Card for Best Work */
-        .card.gold-card { border: 1px solid rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.02); }
-        .card.gold-card:hover { border-color: #ffd700; box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2); }
+        /* WIDE CARD for Masterpiece */
+        .card.wide { grid-column: 1 / -1; } /* Spans full width */
+        .card.wide .video-wrapper { padding-bottom: 40%; } /* Cinematic Aspect Ratio */
 
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; background: black;
+            transition: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: all; }
+
+        /* Hover Effect: Scale Video slightly, Show Border */
+        .card:hover .video-wrapper { transform: scale(1.02); opacity: 0.8; }
+        .card:hover { border-color: var(--neon-red); }
+
+        .content {
+            padding: 20px; background: var(--card-bg); position: relative; z-index: 2;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .info h3 { font-family: 'Teko', sans-serif; font-size: 1.8rem; font-weight: 300; text-transform: uppercase; margin-bottom: 5px; }
+        .info p { font-size: 0.8rem; color: #666; max-width: 400px; }
         
-        .content { padding: 25px; }
-        .tag { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; color: #ff3333; text-transform: uppercase; display: block; margin-bottom: 10px; }
-        .gold-card .tag { color: #ffd700; } /* Gold tag for best work */
-        
-        h3 { font-size: 1.5rem; margin-bottom: 10px; font-weight: 700; color: #fff; }
-        p { color: #bbb; font-size: 0.9rem; line-height: 1.6; }
+        .arrow { font-size: 1.5rem; opacity: 0; transform: translateX(-20px); transition: 0.3s; color: var(--neon-red); }
+        .card:hover .arrow { opacity: 1; transform: translateX(0); }
 
-        footer { text-align: center; padding: 60px; color: #444; font-size: 0.8rem; margin-top: 50px; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- 7. FOOTER --- */
+        footer { 
+            padding: 100px 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); 
+            margin-top: 100px; font-family: 'Teko', sans-serif; font-size: 2rem; color: #333;
+        }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            h1 { font-size: 4rem; }
+            .grid { grid-template-columns: 1fr; }
+            .card.wide { grid-column: auto; }
+            .card.wide .video-wrapper { padding-bottom: 56.25%; }
+            #cursor { display: none; }
+            * { cursor: auto; }
+        }
     </style>
 </head>
 <body>
 
+    <div class="noise"></div>
+    <div id="cursor"></div>
+
+    <div class="marquee-container">
+        <div class="marquee-content">
+            Video Editor — Visual Storyteller — Documentary — Motion Graphics — Video Editor — Visual Storyteller —
+        </div>
+    </div>
+
     <header>
-        <p class="subtitle">Video Editor & Visual Storyteller</p>
-        <h1>Faiq Subhani</h1>
-        <p class="subtitle" style="font-size: 0.9rem; opacity: 0.7;">Documentaries | Commercials | Motion Graphics</p>
-        <a href="mailto:faiqsubhani0987@gmail.com" class="btn">Let's Create</a>
+        <span class="role-tag">Portfolio 2026</span>
+        <h1 id="hacker-text" data-value="FAIQ SUBHANI">FAIQ SUBHANI</h1>
+        <a href="mailto:faiqsubhani0987@gmail.com" class="cta-btn link-hover">Initiate Project</a>
     </header>
 
     <main class="container">
         
-        <h2 class="section-title gold-title">⭐ Featured Masterpiece</h2>
+        <div class="section-label">01 // Featured Work</div>
         <div id="best-grid" class="grid"></div>
 
-        <div class="divider"></div>
-
-        <h2 class="section-title">📽️ Recent Documentaries</h2>
+        <div class="section-label">02 // The Archives</div>
         <div id="recent-grid" class="grid"></div>
 
-        <div class="divider"></div>
-
-        <h2 class="section-title" style="border-color: #e91e63;">💍 Wedding & Events</h2>
+        <div class="section-label">03 // Events & Motion</div>
         <div id="wedding-grid" class="grid"></div>
-
-        <div class="divider"></div>
-
-        <h2 class="section-title" style="border-color: #4caf50;">🤝 Charity & Social Cause</h2>
+        
+        <div class="section-label">04 // Social Impact</div>
         <div id="charity-grid" class="grid"></div>
 
     </main>
 
     <footer>
-        <p>© 2026. Made with code & creativity.</p>
+        <p>SYSTEM ONLINE</p>
     </footer>
 
     <script>
-        // --- 1. DATA CONFIGURATION ---
-        
+        // --- 1. DATA ---
         const bestWork = [
-            {
-                title: "Pakistan's Population Crisis",
-                category: "Masterpiece",
-                videoId: "3eW6-eLEPHQ",
-                description: "An analytical video essay on population growth and resource management."
-            }
+            { title: "Pakistan's Population Crisis", category: "Featured", videoId: "3eW6-eLEPHQ", description: "Analytical video essay on resource management." }
         ];
 
         const recentDocs = [
-            {
-                title: "History of Lahore (Lahore Ki Tareekh)",
-                category: "Documentary",
-                videoId: "NispElXFGwU",
-                description: "A deep dive into the transformation of Lahore, from ancient origins to the modern metropolis."
-            },
-            {
-                title: "History of New Zealand",
-                category: "Documentary",
-                videoId: "I0m0MaAFo68",
-                description: "Educational documentary style edit covering the rich history of New Zealand."
-            },
-            {
-                title: "Sir Ganga Ram: Father of Modern Lahore",
-                category: "Documentary",
-                videoId: "_3dtPq1IXwo",
-                description: "One of my best edits: The forgotten legacy of the man who built modern Lahore."
-            },
-            {
-                title: "History of Balochistan ",
-                category: "Documentary",
-                videoId: "nZ77PizOOFI",
-                description: "A comprehensive historical breakdown of the Balochistan region."
-            },
-            {
-                title: "India vs Pakistan Textbooks",
-                category: "Documentary",
-                videoId: "7doosE20FaA",
-                description: "Comparing how history is taught differently across the border."
-            }
+            { title: "History of Lahore", category: "Documentary", videoId: "NispElXFGwU", description: "Transformation of the modern metropolis." },
+            { title: "History of New Zealand", category: "Documentary", videoId: "I0m0MaAFo68", description: "Educational documentary style edit." },
+            { title: "Sir Ganga Ram", category: "Documentary", videoId: "_3dtPq1IXwo", description: "The forgotten legacy of Lahore." },
+            { title: "History of Balochistan", category: "Documentary", videoId: "nZ77PizOOFI", description: "Historical breakdown." },
+            { title: "India vs Pakistan Textbooks", category: "Documentary", videoId: "7doosE20FaA", description: "Educational comparison." }
         ];
 
         const weddingVideos = [
-            {
-                title: "Wedding Invitation: Elegant Floral",
-                category: "Wedding",
-                videoId: "dm036YB0OTM",
-                description: "Vertical short-form motion graphics for a digital wedding invite."
-            },
-            {
-                title: "Wedding Invitation: Royal Gold",
-                category: "Wedding",
-                videoId: "Hz2GgyhBNfw",
-                description: "Premium animation style for a luxury wedding announcement."
-            }
+            { title: "Wedding Invitation: Elegant", category: "Motion", videoId: "dm036YB0OTM", description: "Vertical short-form motion." },
+            { title: "Wedding Invitation: Royal", category: "Motion", videoId: "Hz2GgyhBNfw", description: "Premium animation." }
         ];
-
+        
         const charityVideos = [
-            {
-                title: "Flood Relief Campaign",
-                category: "Charity",
-                videoId: "hRwTgTQYx4E",
-                description: "Donation appeal video created for Pixter & COMSATS flood relief efforts."
-            },
-            
+            { title: "Flood Relief Campaign", category: "Impact", videoId: "hRwTgTQYx4E", description: "Donation appeal for Pixter." }
         ];
 
         // --- 2. BUILDER FUNCTION ---
-        function createCards(videoList, gridId, isGold = false) {
+        function createCards(videoList, gridId, isWide = false) {
             const grid = document.getElementById(gridId);
             videoList.forEach(video => {
                 const card = document.createElement('div');
-                card.classList.add('card');
-                if (isGold) card.classList.add('gold-card'); // Adds special gold glow
+                card.classList.add('card', 'link-hover');
+                if (isWide) card.classList.add('wide'); // Makes the card span full width
 
                 card.innerHTML = `
                     <div class="video-wrapper">
-                        <iframe 
-                            src="https://www.youtube.com/embed/${video.videoId}" 
-                            title="${video.title}"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
+                        <iframe src="https://www.youtube.com/embed/${video.videoId}" title="${video.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                     <div class="content">
-                        <span class="tag">${video.category}</span>
-                        <h3>${video.title}</h3>
-                        <p>${video.description}</p>
+                        <div class="info">
+                            <h3>${video.title}</h3>
+                            <p>${video.category} // ${video.description}</p>
+                        </div>
+                        <div class="arrow">→</div>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // --- 3. EXECUTE ---
-        createCards(bestWork, 'best-grid', true); // True = Gold Style
+        // Execute
+        createCards(bestWork, 'best-grid', true); // TRUE makes it Wide
         createCards(recentDocs, 'recent-grid');
         createCards(weddingVideos, 'wedding-grid');
         createCards(charityVideos, 'charity-grid');
 
+        // --- 3. HACKER TEXT DECRYPTION EFFECT ---
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let interval = null;
+
+        document.querySelector("#hacker-text").onmouseover = event => {  
+            let iteration = 0;
+            clearInterval(interval);
+            
+            interval = setInterval(() => {
+                event.target.innerText = event.target.innerText
+                .split("")
+                .map((letter, index) => {
+                    if(index < iteration) {
+                        return event.target.dataset.value[index];
+                    }
+                    return letters[Math.floor(Math.random() * 26)]
+                })
+                .join("");
+                
+                if(iteration >= event.target.dataset.value.length){ 
+                    clearInterval(interval);
+                }
+                
+                iteration += 1 / 3;
+            }, 30);
+        }
+
+        // Auto trigger hacker effect on load
+        window.onload = () => {
+            const header = document.querySelector("#hacker-text");
+            // Trigger hover event manually
+            header.onmouseover({ target: header });
+        };
+
+        // --- 4. CUSTOM CURSOR ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Link Hover Effects
+        document.querySelectorAll('.link-hover').forEach(link => {
+            link.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            link.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
     </script>
-
 </body>
-
 </html>
