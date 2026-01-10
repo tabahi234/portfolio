@@ -14,23 +14,102 @@
             --text-main: #ffffff;
             --text-muted: #a1a1a1;
             --accent: #fff;
-            --neon-red: #ff2a2a; /* New Red for button */
+            --neon-red: #ff2a2a; 
             --border: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Hide Default Cursor */ }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
         html { scroll-behavior: smooth; }
 
         body { 
             background-color: var(--bg-dark); 
-            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, var(--bg-dark) 80%);
             color: var(--text-main); 
             font-family: 'Inter', sans-serif; 
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* --- 2. CURSOR GLOW EFFECT --- */
+        /* --- 2. NEW SPLIT HERO SECTION --- */
+        header {
+            min-height: 100vh; /* Full screen */
+            display: grid; 
+            grid-template-columns: 45% 55%; /* Split: 45% Image, 55% Text */
+            padding: 0; 
+            position: relative; 
+            z-index: 2;
+        }
+
+        .hero-image {
+            /* This is the background image URL - Dark Cinematic Camera Lens vibe */
+            background-image: url('img1.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        /* Gradient fade so the image blends into the dark background */
+        .hero-image::after {
+            content: ''; position: absolute; top: 0; right: 0; width: 15%; height: 100%;
+            background: linear-gradient(to right, transparent, var(--bg-dark));
+        }
+
+        .hero-content {
+            display: flex; flex-direction: column; 
+            justify-content: center; align-items: flex-start; /* Left align text */
+            padding: 0 10%; 
+            background: var(--bg-dark);
+        }
+
+        /* Mobile Adjustments for Header */
+        @media(max-width: 900px) {
+            header { grid-template-columns: 1fr; min-height: auto; }
+            .hero-image { height: 40vh; width: 100%; order: 1; }
+            .hero-image::after { width: 100%; height: 20%; top: auto; bottom: 0; right: auto; background: linear-gradient(to top, var(--bg-dark), transparent); }
+            .hero-content { padding: 60px 20px; order: 2; min-height: 50vh; }
+        }
+
+        .hero-label {
+            font-size: 0.8rem; color: var(--neon-red); text-transform: uppercase; 
+            letter-spacing: 4px; margin-bottom: 25px; font-weight: 700;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .hero-label::before { content: ''; width: 30px; height: 1px; background: var(--neon-red); }
+
+        h1 {
+            font-family: 'Outfit', sans-serif; font-size: clamp(3rem, 6vw, 5.5rem); 
+            font-weight: 900; line-height: 1; margin-bottom: 30px;
+            color: #fff;
+        }
+
+        p.hero-desc { max-width: 500px; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px; }
+
+        /* --- 3. RED LOADING BUTTON --- */
+        .cta-btn {
+            background: var(--text-main); color: #000; padding: 18px 40px; 
+            border-radius: 4px; text-decoration: none; font-weight: 700; 
+            position: relative; overflow: hidden; z-index: 1;
+            transition: color 0.3s ease-in-out, transform 0.2s, box-shadow 0.2s;
+            cursor: none; display: inline-block;
+        }
+        .cta-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
+            background: var(--neon-red); transition: width 0.3s ease-in-out; z-index: -1;
+        }
+        .cta-btn:hover { color: #fff; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 42, 42, 0.3); }
+        .cta-btn:hover::before { width: 100%; }
+
+        /* --- 4. NAVIGATION (Floating) --- */
+        nav {
+            position: absolute; top: 0; left: 0; width: 100%;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 30px 5%; z-index: 10; pointer-events: none; /* Let clicks pass through */
+        }
+        .logo { font-family: 'Outfit', sans-serif; font-weight: 900; letter-spacing: 1px; font-size: 1.2rem; pointer-events: all; }
+        .nav-links { pointer-events: all; }
+        .nav-links a { color: var(--text-main); text-decoration: none; margin-left: 30px; font-size: 0.9rem; transition: 0.3s; cursor: none; }
+        .nav-links a:hover { color: var(--neon-red); }
+
+        /* --- 5. CURSOR GLOW --- */
         #cursor-glow {
             width: 400px; height: 400px;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(0,0,0,0) 70%);
@@ -44,87 +123,14 @@
             transform: translate(-50%, -50%); z-index: 10000;
         }
 
-        /* --- 3. SCROLL ANIMATION CLASSES --- */
-        .reveal {
-            opacity: 0; transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
+        /* --- 6. SCROLL REVEAL --- */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* --- 4. NAVIGATION --- */
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 30px 5%; max-width: 1400px; margin: 0 auto; position: relative; z-index: 10;
-        }
-        .logo { font-family: 'Outfit', sans-serif; font-weight: 900; letter-spacing: 1px; font-size: 1.2rem; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 30px; font-size: 0.9rem; transition: 0.3s; cursor: none; }
-        .nav-links a:hover { color: var(--text-main); }
-
-        /* --- 5. HERO SECTION --- */
-        header {
-            min-height: 80vh; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; text-align: center;
-            padding: 0 20px; position: relative; z-index: 2;
-        }
-
-        .hero-label {
-            font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; 
-            letter-spacing: 4px; margin-bottom: 20px; border: 1px solid var(--border);
-            padding: 8px 16px; border-radius: 50px;
-        }
-
-        h1 {
-            font-family: 'Outfit', sans-serif; font-size: clamp(3rem, 8vw, 6rem); 
-            font-weight: 900; line-height: 1.1; margin-bottom: 30px;
-            background: linear-gradient(180deg, #fff 0%, #888 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        p.hero-desc { max-width: 600px; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px; }
-
-        /* --- RED LOADING BUTTON ANIMATION (NEW) --- */
-        .cta-btn {
-            background: var(--text-main); 
-            color: #000; 
-            padding: 18px 40px; 
-            border-radius: 5px; 
-            text-decoration: none; 
-            font-weight: 700; 
-            position: relative;
-            overflow: hidden; /* Keeps the filling inside */
-            z-index: 1; /* Keeps text on top */
-            transition: color 0.3s ease-in-out, transform 0.2s, box-shadow 0.2s;
-            cursor: none;
-        }
-
-        /* The red filling layer */
-        .cta-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 0%; /* Start empty */
-            height: 100%;
-            background: var(--neon-red);
-            transition: width 0.3s ease-in-out; /* Smooth filling animation */
-            z-index: -1; /* Behind text */
-        }
-
-        /* Hover state */
-        .cta-btn:hover {
-            color: #fff; /* Make text white */
-            transform: translateY(-2px); 
-            box-shadow: 0 10px 30px rgba(255, 42, 42, 0.3); /* Red glow shadow */
-        }
-        
-        /* Trigger fill on hover */
-        .cta-btn:hover::before {
-            width: 100%;
-        }
-
-        /* --- 6. ABOUT SECTION --- */
+        /* --- 7. ABOUT SECTION --- */
         .about-section {
             background: var(--bg-accent); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-            padding: 100px 5%; margin: 50px 0; position: relative; z-index: 2;
+            padding: 100px 5%; margin: 0; position: relative; z-index: 2;
         }
         .about-container {
             max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 50px;
@@ -134,11 +140,8 @@
         .about-text p { margin-bottom: 20px; color: var(--text-muted); }
         .about-text strong { color: #fff; }
 
-        @media(max-width: 768px) { .about-container { grid-template-columns: 1fr; } }
-
-        /* --- 7. PORTFOLIO GRID --- */
+        /* --- 8. PORTFOLIO GRID --- */
         .container { max-width: 1400px; margin: 0 auto; padding: 50px 5%; position: relative; z-index: 2; }
-
         .section-header {
             margin-top: 100px; margin-bottom: 40px; display: flex; align-items: flex-end; justify-content: space-between;
             border-bottom: 1px solid var(--border); padding-bottom: 20px;
@@ -161,11 +164,11 @@
         .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: all; }
 
         .info-box { padding: 25px; display: flex; flex-direction: column; justify-content: center; }
-        .category { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 10px; font-weight: 700; }
+        .category { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); margin-bottom: 10px; font-weight: 700; opacity: 0.7; }
         h3 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin-bottom: 10px; }
         p.desc { font-size: 0.9rem; color: var(--text-muted); }
 
-        /* --- 8. FOOTER --- */
+        /* --- 9. FOOTER --- */
         footer {
             margin-top: 150px; padding: 80px 5%; border-top: 1px solid var(--border);
             text-align: center; background: var(--bg-accent); position: relative; z-index: 2;
@@ -191,11 +194,14 @@
         </div>
     </nav>
 
-    <header class="reveal">
-        <span class="hero-label">Available for New Projects</span>
-        <h1>VISUAL STORYTELLER<br>& EDITOR.</h1>
-        <p class="hero-desc">I turn raw footage into compelling documentaries. Based in Lahore, serving creators globally with high-retention editing.</p>
-        <a href="mailto:faiqsubhani0987@gmail.com" class="cta-btn">Initiate Project</a>
+    <header>
+        <div class="hero-image"></div>
+        <div class="hero-content reveal">
+            <span class="hero-label">Available for Hire</span>
+            <h1>VISUAL<br>STORYTELLER<br>& EDITOR.</h1>
+            <p class="hero-desc">I edit high-retention documentaries for creators and brands. Based in Lahore, working globally.</p>
+            <a href="mailto:faiqsubhani0987@gmail.com" class="cta-btn link-hover">Initiate Project</a>
+        </div>
     </header>
 
     <section id="about" class="about-section reveal">
@@ -203,7 +209,7 @@
             <div class="about-title">Who is<br>Faiq?</div>
             <div class="about-text">
                 <p>I am a video editor and visual storyteller based in <strong>Lahore, Pakistan</strong>. I don't just cut video; I engineer attention.</p>
-                <p>Specializing in the <strong>"Documentary Style"</strong> (Vox/MagnatesMedia style), I help YouTubers and brands turn complex scripts into engaging visual journeys. From historical deep-dives to high-energy commercials, my goal is simple: <strong>Keep the viewer watching.</strong></p>
+                <p>Specializing in the <strong>"Documentary Style"</strong>, I help YouTubers and brands turn complex scripts into engaging visual journeys. From historical deep-dives to high-energy commercials, my goal is simple: <strong>Keep the viewer watching.</strong></p>
                 <p>Whether it's a 20-minute history doc or a 30-second wedding highlight, I bring a cinematic standard to every timeline.</p>
             </div>
         </div>
@@ -241,8 +247,7 @@
         <span class="footer-logo">FAIQ SUBHANI</span>
         <div class="footer-links">
             <a href="mailto:faiqsubhani0987@gmail.com" class="link-hover">Email Me</a>
-            <a href="#" class="link-hover">LinkedIn</a>
-            <a href="#" class="link-hover">YouTube</a>
+
         </div>
         <div class="copyright">
             &copy; 2026 Faiq Subhani. All Rights Reserved.<br>
@@ -251,7 +256,6 @@
     </footer>
 
     <script>
-        // --- 1. DATA ---
         const featuredData = [
             { 
                 title: "Pakistan's Population Crisis", 
@@ -303,25 +307,23 @@
             },
             { 
                 title: "Elegant Invite", 
-                cat: "Vertical Motion", 
+                cat: "Premium Animation ", 
                 id: "dm036YB0OTM", 
-                desc: "Short-form wedding motion graphics optimized for mobile viewing." 
+                desc: "Luxury animation style for high-end wedding announcements." 
             },
             { 
                 title: "Royal Gold Invite", 
-                cat: "Premium Animation", 
+                cat: "Vertical Motion", 
                 id: "Hz2GgyhBNfw", 
                 desc: "Luxury animation style for high-end wedding announcements." 
             }
         ];
 
-        // --- 2. RENDER ENGINE ---
         function renderCards(data, containerId, isHero = false) {
             const container = document.getElementById(containerId);
             data.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = isHero ? 'card hero-card reveal' : 'card reveal';
-                // Stagger delay for cool entrance
                 card.style.transitionDelay = `${index * 100}ms`;
                 
                 card.innerHTML = `
@@ -334,10 +336,8 @@
                         <p class="desc">${item.desc}</p>
                     </div>
                 `;
-                // Add hover effect for cursor
                 card.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
                 card.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-                
                 container.appendChild(card);
             });
         }
@@ -347,7 +347,7 @@
         renderCards(motionData, 'motion-grid');
         renderCards(motionData.slice(0,1), 'charity-grid');
 
-        // --- 3. SCROLL REVEAL LOGIC ---
+        // Scroll Reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -355,23 +355,20 @@
                 }
             });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // --- 4. CURSOR GLOW LOGIC ---
+        // Cursor Glow
         const cursorDot = document.getElementById('cursor-dot');
         const cursorGlow = document.getElementById('cursor-glow');
 
         document.addEventListener('mousemove', (e) => {
             cursorDot.style.left = e.clientX + 'px';
             cursorDot.style.top = e.clientY + 'px';
-            
-            // Add lag to glow for smoothness
             cursorGlow.style.left = e.clientX + 'px';
             cursorGlow.style.top = e.clientY + 'px';
         });
 
-        // Hover scale effect for links and button
+        // Hover scale
         document.querySelectorAll('a, .cta-btn, .card').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 cursorGlow.style.width = '150px';
@@ -384,7 +381,6 @@
                 cursorGlow.style.background = 'radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(0,0,0,0) 70%)';
             });
         });
-
     </script>
 </body>
 </html>
